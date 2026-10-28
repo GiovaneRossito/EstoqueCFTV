@@ -1,5 +1,5 @@
-﻿namespace EstoqueCFTV.Models
-{
+﻿namespace EstoqueCFTV.Models;
+
     public enum TipoMovimentacao
     {
         Entrada = 1,
@@ -16,8 +16,11 @@
         public TipoMovimentacao Tipo { get; set; }
         public int Quantidade { get; set; }
         public DateTime DataMovimentacao { get; set; } = DateTime.Now;
-
-        public string? Observacao { get; set; } // ex: "Instalação da OS #102"
-        public string Responsavel { get; set; } = string.Empty;
+        public string? Observacao { get; set; } 
+        
+        public int UsuarioId { get; set; }
+        public Usuario? Usuario { get; set; }
+        
+        public int? ClienteId { get; set; }
+        public Cliente? Cliente { get; set; }
     }
-}
