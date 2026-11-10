@@ -8,19 +8,4 @@ public class CategoriaService
     {
         
     }
-
-    public Categoria Salvar(Categoria categoria)
-    {
-        
-    }
-
-    public Categoria Atualizar(Categoria categoria, long id)
-    {
-        
-    }
-
-    public Categoria Excluir(long id)
-    {
-        
-    }
 }

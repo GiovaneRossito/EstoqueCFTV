@@ -8,19 +8,4 @@ public class ClienteService
     {
         
     }
-
-    public Cliente Salvar(Cliente cliente)
-    {
-        
-    }
-
-    public Cliente Atualizar(Cliente cliente, long id)
-    {
-        
-    }
-
-    public Cliente Excluir(long id)
-    {
-        
-    }
 }

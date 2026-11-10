@@ -8,19 +8,4 @@ public class UsuarioService
     {
         
     }
-
-    public Usuario Salvar(Usuario usuario)
-    {
-        
-    }
-
-    public Usuario Atualizar(Usuario usuario, long id)
-    {
-        
-    }
-
-    public Usuario Excluir(long id)
-    {
-        
-    }
 }

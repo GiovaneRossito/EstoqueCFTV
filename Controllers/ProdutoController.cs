@@ -5,7 +5,7 @@ namespace EstoqueCFTV.Controllers;
 
 public class ProdutoController
 {
-    private ProdutoService service;
+    private readonly ProdutoService service;
 
     public ProdutoController(ProdutoService service)
     {
@@ -17,6 +17,18 @@ public class ProdutoController
         return service.ListarTodos();
     }
 
+    public Produto Salvar(Produto produto)
+    {
+        return service.Salvar(produto);
+    }
 
-    
+    public Produto Atualizar(Produto produto, long id)
+    {
+        return service.AtualizarProduto(produto, id);
+    }
+
+    public Produto Excluir(long id)
+    {
+        return service.DeletarProduto(id)
+    }
 }

@@ -8,19 +8,4 @@ public class ServicoService
     {
         
     }
-
-    public Servico Salvar(Servico servico)
-    {
-        
-    }
-
-    public Servico Atualizar(Servico servico, long id)
-    {
-        
-    }
-
-    public Servico Excluir(long id)
-    {
-        
-    }
 }

@@ -8,19 +8,4 @@ public class ItemServicoOSService
     {
         
     }
-
-    public ItemServicoOS Salvar(ItemServicoOS itemServicoOs)
-    {
-        
-    }
-
-    public ItemServicoOS Atualizar(ItemServicoOS itemServicoOs, long id)
-    {
-        
-    }
-
-    public ItemServicoOS Excluir(long id)
-    {
-        
-    }
 }
