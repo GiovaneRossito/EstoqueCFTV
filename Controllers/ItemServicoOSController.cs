@@ -22,13 +22,13 @@ public class ItemServicoOSController
         return service.Salvar(itemServicoOs);
     }
 
-    public ItemServicoOS Atualizar(ItemServicoOS itemServicoOs, long id)
+    public ItemServicoOS Atualizar(ItemServicoOS ItemServicoOs, long ordemDeServicoId, int servicoId)
     {
-        return service.AtualizarItemServicoOs(itemServicoOs, id);
+        return service.AtualizarItemServicoOs(ItemServicoOs, ordemDeServicoId, servicoId);
     }
 
-    public ItemServicoOS Excluir(long id)
+    public ItemServicoOS Excluir(long ordemDeServicoId, int servicoId)
     {
-        return service.DeletarItemServicoOs(id);
+        return service.DeletarItemServicoOs(ordemDeServicoId, servicoId);
     }
 }

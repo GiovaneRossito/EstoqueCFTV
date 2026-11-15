@@ -29,6 +29,6 @@ public class ProdutoController
 
     public Produto Excluir(long id)
     {
-        return service.DeletarProduto(id)
+        return service.DeletarProduto(id);
     }
 }
