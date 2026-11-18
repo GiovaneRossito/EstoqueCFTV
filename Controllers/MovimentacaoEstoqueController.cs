@@ -5,30 +5,30 @@ namespace EstoqueCFTV.Controllers;
 
 public class MovimentacaoEstoqueController
 {
-    private MovimentacaoEstoqueService service;
+    private MovimentacaoEstoqueService _service;
 
     public MovimentacaoEstoqueController(MovimentacaoEstoqueService service)
     {
-        this.service = service;
+        this._service = service;
     }
     
     public List<MovimentacaoEstoque> Listar()
     {
-        return service.ListarTodos();
+        return _service.ListarTodos();
     }
 
     public MovimentacaoEstoque Salvar(MovimentacaoEstoque movimentacaoEstoque)
     {
-        return service.Salvar(movimentacaoEstoque);
+        return _service.Salvar(movimentacaoEstoque);
     }
 
-    public MovimentacaoEstoque Atualizar(MovimentacaoEstoque movimentacaoEstoque, long id)
+    public MovimentacaoEstoque Atualizar(MovimentacaoEstoque movimentacaoEstoque, int id)
     {
-        return service.AtualizarMovimentacaoEstoque(movimentacaoEstoque, id);
+        return _service.AtualizarMovimentacaoEstoque(movimentacaoEstoque, id);
     }
 
-    public MovimentacaoEstoque Excluir(long id)
+    public MovimentacaoEstoque Excluir(int id)
     {
-        return service.DeletarMovimentacaoEstoque(id);
+        return _service.DeletarMovimentacaoEstoque(id);
     }
 }

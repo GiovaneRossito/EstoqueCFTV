@@ -5,30 +5,30 @@ namespace EstoqueCFTV.Controllers;
 
 public class UsuarioController
 {
-    private UsuarioService service;
+    private UsuarioService _service;
 
     public UsuarioController(UsuarioService service)
     {
-        this.service = service;
+        this._service = service;
     }
     
     public List<Usuario> Listar()
     {
-        return service.ListarTodos();
+        return _service.ListarTodos();
     }
 
     public Usuario Salvar(Usuario usuario)
     {
-        return service.Salvar(usuario);
+        return _service.Salvar(usuario);
     }
 
-    public Usuario Atualizar(Usuario usuario, long id)
+    public Usuario Atualizar(Usuario usuario, int id)
     {
-        return service.AtualizarUsuario(usuario, id);
+        return _service.AtualizarUsuario(usuario, id);
     }
 
-    public Usuario Excluir(long id)
+    public Usuario Excluir(int id)
     {
-        return service.DeletarUsuario(id);
+        return _service.DeletarUsuario(id);
     }
 }

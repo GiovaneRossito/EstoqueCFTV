@@ -29,21 +29,21 @@ public class CategoriaService
     }
     
 
-    public Categoria AtualizarCategoria(Categoria categoria, long id)
+    public Categoria AtualizarCategoria(Categoria categoria, int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
         {
             throw new ArgumentException("ID da categoria inválido.");
         }
 
-        var categoriaExistente = _context.Categorias.Find((int)id);
+        var categoriaExistente = _context.Categorias.Find(id);
 
         if (categoriaExistente == null)
         {
             throw new KeyNotFoundException("Categoria não encontrada.");
         }
 
-        ValidarCategoria(categoria, (int)id);
+        ValidarCategoria(categoria, id);
 
         categoriaExistente.Nome = categoria.Nome;
         categoriaExistente.Descricao = categoria.Descricao;
@@ -54,14 +54,14 @@ public class CategoriaService
     }
 
 
-    public Categoria DeletarCategoria(long id)
+    public Categoria DeletarCategoria(int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
         {
             throw new ArgumentException("ID da categoria inválido.");
         }
 
-        var categoria = _context.Categorias.Find((int)id);
+        var categoria = _context.Categorias.Find(id);
 
         if (categoria == null)
         {

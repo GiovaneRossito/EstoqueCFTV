@@ -35,21 +35,21 @@ public class ProdutoService
     }
 
 
-    public Produto AtualizarProduto(Produto produto, long id)
+    public Produto AtualizarProduto(Produto produto, int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
         {
             throw new ArgumentException("ID do produto inválido.");
         }
 
-        var produtoExistente = _context.Produtos.Find((int)id);
+        var produtoExistente = _context.Produtos.Find(id);
 
         if (produtoExistente == null)
         {
             throw new KeyNotFoundException("Produto não encontrado.");
         }
 
-        ValidarProduto(produto, (int)id);
+        ValidarProduto(produto, id);
 
         produtoExistente.Nome = produto.Nome;
         produtoExistente.SKU = produto.SKU;
@@ -66,20 +66,26 @@ public class ProdutoService
     }
 
     
-    public Produto DeletarProduto(long id)
+    public Produto DeletarProduto(int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
         {
             throw new ArgumentException("ID do produto inválido.");
         }
 
-        var produto = _context.Produtos.Find((int)id);
+        var produto = _context.Produtos.Find(id);
 
         if (produto == null)
         {
             throw new KeyNotFoundException("Produto não encontrado.");
         }
 
+        if (_context.Movimentacoes.Any(m => m.ProdutoId == id))
+        {
+            throw new InvalidOperationException(
+                "Não é possível excluir um produto que possui movimentação de estoque.");
+        }
+        
         _context.Produtos.Remove(produto);
         _context.SaveChanges();
 

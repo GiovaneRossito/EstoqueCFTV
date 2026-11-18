@@ -53,12 +53,12 @@ public class MovimentacaoEstoqueService
 
 
     public MovimentacaoEstoque AtualizarMovimentacaoEstoque(
-        MovimentacaoEstoque movimentacao, long id)
+        MovimentacaoEstoque movimentacao, int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
             throw new ArgumentException("ID da movimentação inválido.");
 
-        var existente = _context.Movimentacoes.Find((int)id);
+        var existente = _context.Movimentacoes.Find(id);
 
         if (existente == null)
             throw new KeyNotFoundException("Movimentação não encontrada.");
@@ -114,12 +114,12 @@ public class MovimentacaoEstoqueService
     }
 
 
-    public MovimentacaoEstoque DeletarMovimentacaoEstoque(long id)
+    public MovimentacaoEstoque DeletarMovimentacaoEstoque(int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
             throw new ArgumentException("ID da movimentação inválido.");
 
-        var movimentacao = _context.Movimentacoes.Find((int)id);
+        var movimentacao = _context.Movimentacoes.Find(id);
 
         if (movimentacao == null)
             throw new KeyNotFoundException("Movimentação não encontrada.");

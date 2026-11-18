@@ -5,30 +5,30 @@ namespace EstoqueCFTV.Controllers;
 
 public class ItemServicoOSController
 {
-    private ItemServicoOSService service;
+    private ItemServicoOSService _service;
 
     public ItemServicoOSController(ItemServicoOSService service)
     {
-        this.service = service;
+        this._service = service;
     }
     
     public List<ItemServicoOS> Listar()
     {
-        return service.ListarTodos();
+        return _service.ListarTodos();
     }
 
     public ItemServicoOS Salvar(ItemServicoOS itemServicoOs)
     {
-        return service.Salvar(itemServicoOs);
+        return _service.Salvar(itemServicoOs);
     }
 
-    public ItemServicoOS Atualizar(ItemServicoOS ItemServicoOs, long ordemDeServicoId, int servicoId)
+    public ItemServicoOS Atualizar(ItemServicoOS ItemServicoOs, int ordemDeServicoId, int servicoId)
     {
-        return service.AtualizarItemServicoOs(ItemServicoOs, ordemDeServicoId, servicoId);
+        return _service.AtualizarItemServicoOs(ItemServicoOs, ordemDeServicoId, servicoId);
     }
 
-    public ItemServicoOS Excluir(long ordemDeServicoId, int servicoId)
+    public ItemServicoOS Excluir(int ordemDeServicoId, int servicoId)
     {
-        return service.DeletarItemServicoOs(ordemDeServicoId, servicoId);
+        return _service.DeletarItemServicoOs(ordemDeServicoId, servicoId);
     }
 }

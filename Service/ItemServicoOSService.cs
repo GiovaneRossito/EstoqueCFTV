@@ -40,13 +40,13 @@ public class ItemServicoOSService
     }
 
     public ItemServicoOS AtualizarItemServicoOs(
-        ItemServicoOS item, long ordemDeServicoId, int servicoId)
+        ItemServicoOS item, int ordemDeServicoId, int servicoId)
     {
-        if (ordemDeServicoId <= 0 || ordemDeServicoId > int.MaxValue)
+        if (ordemDeServicoId <= 0)
             throw new ArgumentException("ID da ordem de serviço inválido.");
 
         var existente = _context.ItemServicos.Find(
-            (int)ordemDeServicoId, servicoId);
+            ordemDeServicoId, servicoId);
 
         if (existente == null)
             throw new KeyNotFoundException("Item da ordem de serviço não encontrado.");
@@ -62,13 +62,13 @@ public class ItemServicoOSService
     }
 
     public ItemServicoOS DeletarItemServicoOs(
-        long ordemDeServicoId, int servicoId)
+        int ordemDeServicoId, int servicoId)
     {
-        if (ordemDeServicoId <= 0 || ordemDeServicoId > int.MaxValue)
+        if (ordemDeServicoId <= 0)
             throw new ArgumentException("ID da ordem de serviço inválido.");
 
         var item = _context.ItemServicos.Find(
-            (int)ordemDeServicoId, servicoId);
+            ordemDeServicoId, servicoId);
 
         if (item == null)
             throw new KeyNotFoundException("Item da ordem de serviço não encontrado.");

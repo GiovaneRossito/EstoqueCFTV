@@ -5,30 +5,30 @@ namespace EstoqueCFTV.Controllers;
 
 public class CategoriaController
 {
-    private CategoriaService service;
+    private CategoriaService _service;
 
     public CategoriaController(CategoriaService service)
     {
-        this.service = service;
+        this._service = service;
     }
     
     public List<Categoria> Listar()
     {
-        return service.ListarTodos();
+        return _service.ListarTodos();
     }
 
     public Categoria Salvar(Categoria categoria)
     {
-        return service.Salvar(categoria);
+        return _service.Salvar(categoria);
     }
 
-    public Categoria Atualizar(Categoria categoria, long id)
+    public Categoria Atualizar(Categoria categoria, int id)
     {
-        return service.AtualizarCategoria(categoria, id);
+        return _service.AtualizarCategoria(categoria, id);
     }
 
-    public Categoria Excluir(long id)
+    public Categoria Excluir(int id)
     {
-        return service.DeletarCategoria(id);
+        return _service.DeletarCategoria(id);
     }
 }

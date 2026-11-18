@@ -31,21 +31,21 @@ public class ClienteService
     }
 
     
-    public Cliente AtualizarCliente(Cliente cliente, long id)
+    public Cliente AtualizarCliente(Cliente cliente, int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
         {
             throw new ArgumentException("ID do cliente inválido.");
         }
 
-        var clienteExistente = _context.Clientes.Find((int)id);
+        var clienteExistente = _context.Clientes.Find(id);
 
         if (clienteExistente == null)
         {
             throw new KeyNotFoundException("Cliente não encontrado.");
         }
 
-        ValidarCliente(cliente, (int)id);
+        ValidarCliente(cliente, id);
 
         clienteExistente.Nome = cliente.Nome;
         clienteExistente.Documento = cliente.Documento;
@@ -58,14 +58,14 @@ public class ClienteService
     }
 
     
-    public Cliente DeletarCliente(long id)
+    public Cliente DeletarCliente(int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
         {
             throw new ArgumentException("ID do cliente inválido.");
         }
 
-        var cliente = _context.Clientes.Find((int)id);
+        var cliente = _context.Clientes.Find(id);
 
         if (cliente == null)
         {

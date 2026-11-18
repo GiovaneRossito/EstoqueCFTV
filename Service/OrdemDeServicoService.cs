@@ -35,12 +35,12 @@ public class OrdemDeServicoService
     }
 
     public OrdemDeServico AtualizarOrdemDeServico(
-        OrdemDeServico ordem, long id)
+        OrdemDeServico ordem, int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
             throw new ArgumentException("ID da ordem de serviço inválido.");
 
-        var existente = _context.OrdemDeServicos.Find((int)id);
+        var existente = _context.OrdemDeServicos.Find(id);
 
         if (existente == null)
             throw new KeyNotFoundException("Ordem de serviço não encontrada.");
@@ -59,12 +59,12 @@ public class OrdemDeServicoService
         return existente;
     }
 
-    public OrdemDeServico DeletarOrdemDeServico(long id)
+    public OrdemDeServico DeletarOrdemDeServico(int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
             throw new ArgumentException("ID da ordem de serviço inválido.");
 
-        var ordem = _context.OrdemDeServicos.Find((int)id);
+        var ordem = _context.OrdemDeServicos.Find(id);
 
         if (ordem == null)
             throw new KeyNotFoundException("Ordem de serviço não encontrada.");

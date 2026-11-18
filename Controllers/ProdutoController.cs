@@ -5,30 +5,30 @@ namespace EstoqueCFTV.Controllers;
 
 public class ProdutoController
 {
-    private readonly ProdutoService service;
+    private readonly ProdutoService _service;
 
     public ProdutoController(ProdutoService service)
     {
-        this.service = service;
+        this._service = service;
     }
     
     public List<Produto> Listar()
     {
-        return service.ListarTodos();
+        return _service.ListarTodos();
     }
 
     public Produto Salvar(Produto produto)
     {
-        return service.Salvar(produto);
+        return _service.Salvar(produto);
     }
 
-    public Produto Atualizar(Produto produto, long id)
+    public Produto Atualizar(Produto produto, int id)
     {
-        return service.AtualizarProduto(produto, id);
+        return _service.AtualizarProduto(produto, id);
     }
 
-    public Produto Excluir(long id)
+    public Produto Excluir(int id)
     {
-        return service.DeletarProduto(id);
+        return _service.DeletarProduto(id);
     }
 }

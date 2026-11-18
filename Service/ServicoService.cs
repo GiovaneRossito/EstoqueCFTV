@@ -28,12 +28,12 @@ public class ServicoService
         return servico;
     }
 
-    public Servico AtualizarServico(Servico servico, long id)
+    public Servico AtualizarServico(Servico servico, int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
             throw new ArgumentException("ID do serviço inválido.");
 
-        var servicoExistente = _context.Servicos.Find((int)id);
+        var servicoExistente = _context.Servicos.Find(id);
 
         if (servicoExistente == null)
             throw new KeyNotFoundException("Serviço não encontrado.");
@@ -49,12 +49,12 @@ public class ServicoService
         return servicoExistente;
     }
 
-    public Servico DeletarServico(long id)
+    public Servico DeletarServico(int id)
     {
-        if (id <= 0 || id > int.MaxValue)
+        if (id <= 0)
             throw new ArgumentException("ID do serviço inválido.");
 
-        var servico = _context.Servicos.Find((int)id);
+        var servico = _context.Servicos.Find(id);
 
         if (servico == null)
             throw new KeyNotFoundException("Serviço não encontrado.");
