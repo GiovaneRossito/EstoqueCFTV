@@ -1,11 +1,7 @@
-using System.Reflection.Metadata.Ecma335;
 using EstoqueCFTV.Models;
 using EstoqueCFTV.Service;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EstoqueCFTV.Controllers;
 
@@ -16,16 +12,15 @@ public class ProdutoController : Controller
 
     public ProdutoController(ProdutoService service, CategoriaService categoriaService)
     {
-        this._service = service;
-        this._categoriaService = categoriaService;
-    }
-    
-    public IActionResult Index()
-    {
-        var produto = _service.ListarTodos();
-        return View(produto);
+        _service = service;
+        _categoriaService = categoriaService;
     }
 
+    public IActionResult Index()
+    {
+        var produtos = _service.ListarTodos();
+        return View(produtos);
+    }
 
     public IActionResult Create()
     {
@@ -48,7 +43,7 @@ public class ProdutoController : Controller
             _service.Salvar(produto);
             return RedirectToAction(nameof(Index));
         }
-            catch (Exception ex)
+        catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
             CarregarCategorias();
@@ -58,9 +53,7 @@ public class ProdutoController : Controller
 
     public IActionResult Edit(int id)
     {
-        var produto = _service.ListarTodos()
-            .FirstOrDefault(p => p.Id == id);
-
+        var produto = _service.ListarTodos().FirstOrDefault(p => p.Id == id);
         if (produto == null)
             return NotFound();
 
@@ -83,19 +76,17 @@ public class ProdutoController : Controller
             _service.AtualizarProduto(produto, id);
             return RedirectToAction(nameof(Index));
         }
-            catch (Exception ex)
+        catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
             CarregarCategorias();
             return View(produto);
         }
     }
-    
+
     public IActionResult Delete(int id)
     {
-        var produto = _service.ListarTodos()
-            .FirstOrDefault(p => p.Id == id);
-
+        var produto = _service.ListarTodos().FirstOrDefault(p => p.Id == id);
         if (produto == null)
             return NotFound();
 
@@ -120,30 +111,6 @@ public class ProdutoController : Controller
 
     private void CarregarCategorias()
     {
-        ViewBag.Categorias = new SelectList(
-            _categoriaService.ListarTodos(),
-            "Id",
-            "Nome"
-            );
-        }
-
-    public List<Produto> Listar()
-    {
-        return _service.ListarTodos();
-    }
-
-    public Produto Salvar(Produto produto)
-    {
-        return _service.Salvar(produto);
-    }
-
-    public Produto Atualizar(Produto produto, int id)
-    {
-        return _service.AtualizarProduto(produto, id);
-    }
-
-    public Produto Excluir(int id)
-    {
-        return _service.DeletarProduto(id);
+        ViewBag.Categorias = new SelectList(_categoriaService.ListarTodos(), "Id", "Nome");
     }
 }

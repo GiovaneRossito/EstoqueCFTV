@@ -1,10 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using EstoqueCFTV.Data;
+using EstoqueCFTV.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<CategoriaService>();
+builder.Services.AddScoped<ClienteService>();
+builder.Services.AddScoped<ItemServicoOSService>();
+builder.Services.AddScoped<MovimentacaoEstoqueService>();
+builder.Services.AddScoped<OrdemDeServicoService>();
+builder.Services.AddScoped<ProdutoService>();
+builder.Services.AddScoped<ServicoService>();
+builder.Services.AddScoped<UsuarioService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

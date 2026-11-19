@@ -1,34 +1,126 @@
 using EstoqueCFTV.Models;
 using EstoqueCFTV.Service;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EstoqueCFTV.Controllers;
 
-public class ItemServicoOSController
+public class ItemServicoOSController : Controller
 {
-    private ItemServicoOSService _service;
+    private readonly ItemServicoOSService _service;
+    private readonly OrdemDeServicoService _osService;
+    private readonly ServicoService _servicoService;
 
-    public ItemServicoOSController(ItemServicoOSService service)
+    public ItemServicoOSController(
+        ItemServicoOSService service,
+        OrdemDeServicoService osService,
+        ServicoService servicoService)
     {
-        this._service = service;
-    }
-    
-    public List<ItemServicoOS> Listar()
-    {
-        return _service.ListarTodos();
-    }
-
-    public ItemServicoOS Salvar(ItemServicoOS itemServicoOs)
-    {
-        return _service.Salvar(itemServicoOs);
+        _service = service;
+        _osService = osService;
+        _servicoService = servicoService;
     }
 
-    public ItemServicoOS Atualizar(ItemServicoOS ItemServicoOs, int ordemDeServicoId, int servicoId)
+    public IActionResult Index()
     {
-        return _service.AtualizarItemServicoOs(ItemServicoOs, ordemDeServicoId, servicoId);
+        var itens = _service.ListarTodos();
+        return View(itens);
     }
 
-    public ItemServicoOS Excluir(int ordemDeServicoId, int servicoId)
+    public IActionResult Create()
     {
-        return _service.DeletarItemServicoOs(ordemDeServicoId, servicoId);
+        CarregarDadosAuxiliares();
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Create(ItemServicoOS item)
+    {
+        if (!ModelState.IsValid)
+        {
+            CarregarDadosAuxiliares();
+            return View(item);
+        }
+
+        try
+        {
+            _service.Salvar(item);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            CarregarDadosAuxiliares();
+            return View(item);
+        }
+    }
+
+    public IActionResult Edit(int ordemDeServicoId, int servicoId)
+    {
+        var item = _service.ListarTodos().FirstOrDefault(i =>
+            i.OrdemDeServicoId == ordemDeServicoId && i.ServicoId == servicoId);
+
+        if (item == null)
+            return NotFound();
+
+        CarregarDadosAuxiliares();
+        return View(item);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(int ordemDeServicoId, int servicoId, ItemServicoOS item)
+    {
+        if (!ModelState.IsValid)
+        {
+            CarregarDadosAuxiliares();
+            return View(item);
+        }
+
+        try
+        {
+            _service.AtualizarItemServicoOs(item, ordemDeServicoId, servicoId);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            CarregarDadosAuxiliares();
+            return View(item);
+        }
+    }
+
+    public IActionResult Delete(int ordemDeServicoId, int servicoId)
+    {
+        var item = _service.ListarTodos().FirstOrDefault(i =>
+            i.OrdemDeServicoId == ordemDeServicoId && i.ServicoId == servicoId);
+
+        if (item == null)
+            return NotFound();
+
+        return View(item);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteConfirmed(int ordemDeServicoId, int servicoId)
+    {
+        try
+        {
+            _service.DeletarItemServicoOs(ordemDeServicoId, servicoId);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            TempData["Erro"] = ex.Message;
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
+    private void CarregarDadosAuxiliares()
+    {
+        ViewBag.OrdensDeServico = new SelectList(_osService.ListarTodos(), "Id", "Id");
+        ViewBag.Servicos = new SelectList(_servicoService.ListarTodos(), "Id", "Nome");
     }
 }

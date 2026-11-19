@@ -1,34 +1,98 @@
 using EstoqueCFTV.Models;
 using EstoqueCFTV.Service;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EstoqueCFTV.Controllers;
 
-public class ClienteController
+public class ClienteController : Controller
 {
-    private ClienteService _service;
+    private readonly ClienteService _service;
 
     public ClienteController(ClienteService service)
     {
-        this._service = service;
-    }
-    
-    public List<Cliente> Listar()
-    {
-        return _service.ListarTodos();
+        _service = service;
     }
 
-    public Cliente Salvar(Cliente cliente)
+    public IActionResult Index()
     {
-        return _service.Salvar(cliente);
+        var clientes = _service.ListarTodos();
+        return View(clientes);
     }
 
-    public Cliente Atualizar(Cliente cliente, int id)
+    public IActionResult Create()
     {
-        return _service.AtualizarCliente(cliente, id);
+        return View();
     }
 
-    public Cliente Excluir(int id)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Create(Cliente cliente)
     {
-        return _service.DeletarCliente(id);
+        if (!ModelState.IsValid)
+            return View(cliente);
+
+        try
+        {
+            _service.Salvar(cliente);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View(cliente);
+        }
+    }
+
+    public IActionResult Edit(int id)
+    {
+        var cliente = _service.ListarTodos().FirstOrDefault(c => c.Id == id);
+        if (cliente == null)
+            return NotFound();
+
+        return View(cliente);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(int id, Cliente cliente)
+    {
+        if (!ModelState.IsValid)
+            return View(cliente);
+
+        try
+        {
+            _service.AtualizarCliente(cliente, id);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View(cliente);
+        }
+    }
+
+    public IActionResult Delete(int id)
+    {
+        var cliente = _service.ListarTodos().FirstOrDefault(c => c.Id == id);
+        if (cliente == null)
+            return NotFound();
+
+        return View(cliente);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteConfirmed(int id)
+    {
+        try
+        {
+            _service.DeletarCliente(id);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            TempData["Erro"] = ex.Message;
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
