@@ -1,0 +1,68 @@
+@model OrdemDeServico
+@{
+    ViewData["Title"] = "Editar ordem de serviço";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="painel-cftv">
+            <h1 class="h4 mb-4">Editar ordem de serviço</h1>
+
+            <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="ClienteId" class="form-label">Cliente</label>
+                        <select asp-for="ClienteId" asp-items="ViewBag.Clientes" class="form-select">
+                            <option value="">Selecione...</option>
+                        </select>
+                        <span asp-validation-for="ClienteId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="UsuarioId" class="form-label">Usuário</label>
+                        <select asp-for="UsuarioId" asp-items="ViewBag.Usuarios" class="form-select">
+                            <option value="">Selecione...</option>
+                        </select>
+                        <span asp-validation-for="UsuarioId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DataAbertura" class="form-label">Data de abertura</label>
+                        <input asp-for="DataAbertura" class="form-control" />
+                        <span asp-validation-for="DataAbertura" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DataConclusao" class="form-label">Data de conclusão (opcional)</label>
+                        <input asp-for="DataConclusao" class="form-control" />
+                        <span asp-validation-for="DataConclusao" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Status" class="form-label">Status</label>
+                        <input asp-for="Status" class="form-control" list="lista-status" />
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                    <datalist id="lista-status">
+                        <option value="Aberta"></option>
+                        <option value="Em andamento"></option>
+                        <option value="Concluída"></option>
+                        <option value="Cancelada"></option>
+                    </datalist>
+                    <div class="col-12">
+                        <label asp-for="Observacoes" class="form-label">Observações</label>
+                        <textarea asp-for="Observacoes" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Observacoes" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-cftv">Salvar</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

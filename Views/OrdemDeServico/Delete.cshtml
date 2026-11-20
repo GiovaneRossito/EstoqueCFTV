@@ -1,0 +1,40 @@
+@model OrdemDeServico
+@{
+    // Cor do badge conforme o status da OS
+    var statusOs = Model.Status ?? "";
+    var classeStatus = statusOs.StartsWith("Conclu", StringComparison.OrdinalIgnoreCase) ? "badge-sucesso"
+        : statusOs.Equals("Aberta", StringComparison.OrdinalIgnoreCase) ? "badge-destaque"
+        : "text-bg-secondary";
+    ViewData["Title"] = "Excluir ordem de serviço";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="painel-cftv">
+            <h1 class="h4 mb-3">Excluir ordem de serviço</h1>
+            <p>Confirma a exclusão do registro abaixo? Esta ação não pode ser desfeita.</p>
+
+            <dl class="row mb-4">
+            <dt class="col-sm-4 col-md-3">Nº</dt>
+            <dd class="col-sm-8 col-md-9">@Model.Id</dd>
+            <dt class="col-sm-4 col-md-3">Cliente</dt>
+            <dd class="col-sm-8 col-md-9">@(Model.Cliente?.Nome ?? "—")</dd>
+            <dt class="col-sm-4 col-md-3">Usuário</dt>
+            <dd class="col-sm-8 col-md-9">@(Model.Usuario?.Nome ?? "—")</dd>
+            <dt class="col-sm-4 col-md-3">Abertura</dt>
+            <dd class="col-sm-8 col-md-9">@Model.DataAbertura.ToString("dd/MM/yyyy HH:mm")</dd>
+            <dt class="col-sm-4 col-md-3">Conclusão</dt>
+            <dd class="col-sm-8 col-md-9">@(Model.DataConclusao?.ToString("dd/MM/yyyy HH:mm") ?? "—")</dd>
+            <dt class="col-sm-4 col-md-3">Status</dt>
+            <dd class="col-sm-8 col-md-9"><span class="badge @classeStatus">@Model.Status</span></dd>
+            <dt class="col-sm-4 col-md-3">Observações</dt>
+            <dd class="col-sm-8 col-md-9">@(Model.Observacoes ?? "—")</dd>
+            </dl>
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">Excluir</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+@model MovimentacaoEstoque
+@{
+    ViewData["Title"] = "Editar movimentação";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="painel-cftv">
+            <h1 class="h4 mb-4">Editar movimentação</h1>
+
+            <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="ProdutoId" class="form-label">Produto</label>
+                        <select asp-for="ProdutoId" asp-items="ViewBag.Produtos" class="form-select">
+                            <option value="">Selecione...</option>
+                        </select>
+                        <span asp-validation-for="ProdutoId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Tipo" class="form-label">Tipo</label>
+                        <select asp-for="Tipo" class="form-select">
+                            <option value="">Selecione...</option>
+                            <option value="@((int)TipoMovimentacao.Entrada)">Entrada</option>
+                            <option value="@((int)TipoMovimentacao.Saida)">Saída</option>
+                        </select>
+                        <span asp-validation-for="Tipo" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Quantidade" class="form-label">Quantidade</label>
+                        <input asp-for="Quantidade" class="form-control" placeholder="0" />
+                        <span asp-validation-for="Quantidade" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DataMovimentacao" class="form-label">Data e hora</label>
+                        <input asp-for="DataMovimentacao" class="form-control" />
+                        <span asp-validation-for="DataMovimentacao" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="UsuarioId" class="form-label">Usuário</label>
+                        <select asp-for="UsuarioId" asp-items="ViewBag.Usuarios" class="form-select">
+                            <option value="">Selecione...</option>
+                        </select>
+                        <span asp-validation-for="UsuarioId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ClienteId" class="form-label">Cliente (opcional)</label>
+                        <select asp-for="ClienteId" asp-items="ViewBag.Clientes" class="form-select">
+                            <option value="">Sem cliente</option>
+                        </select>
+                        <span asp-validation-for="ClienteId" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Observacao" class="form-label">Observação</label>
+                        <textarea asp-for="Observacao" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Observacao" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-cftv">Salvar</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

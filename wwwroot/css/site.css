@@ -1,3 +1,20 @@
+/* ==========================================================
+   CORES DO SISTEMA
+   Para trocar o visual inteiro, altere apenas as variáveis abaixo.
+   ========================================================== */
+:root {
+  --cor-primaria: #12263a;        /* barra de navegação e títulos */
+  --cor-destaque: #0b6fa8;        /* botões principais, links e saídas de estoque */
+  --cor-destaque-hover: #09598a;  /* botões e links ao passar o mouse */
+  --cor-fundo: #eef2f6;           /* fundo da página */
+  --cor-card: #ffffff;            /* painéis, cards e rodapé */
+  --cor-texto: #1c2733;           /* texto geral */
+  --cor-borda: #d5dde6;           /* bordas e divisórias */
+  --cor-sucesso: #1e7e4f;         /* entradas de estoque, estoque OK, OS concluída */
+  --cor-alerta: #b45309;          /* estoque baixo */
+}
+
+/* ---------- Base ---------- */
 html {
   font-size: 14px;
 }
@@ -8,24 +25,161 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+h1, h2, h3, h4, h5, h6 {
+  color: var(--cor-primaria);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+a {
+  color: var(--cor-destaque);
+}
+
+a:hover {
+  color: var(--cor-destaque-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+/* ---------- Barra de navegação ---------- */
+.navbar-cftv {
+  --bs-navbar-color: var(--cor-borda);
+  --bs-navbar-hover-color: var(--cor-card);
+  --bs-navbar-active-color: var(--cor-card);
+  --bs-navbar-brand-color: var(--cor-card);
+  --bs-navbar-brand-hover-color: var(--cor-card);
+  background-color: var(--cor-primaria);
+  border-bottom: 3px solid var(--cor-destaque);
+}
+
+.navbar-cftv .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+}
+
+/* "lente de câmera" ao lado do nome do sistema */
+.navbar-cftv .navbar-brand::before {
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: var(--cor-destaque);
+  border: 2px solid var(--cor-card);
+}
+
+.navbar-cftv .nav-link.active {
+  box-shadow: inset 0 -3px 0 var(--cor-destaque);
+}
+
+/* ---------- Botões ---------- */
+.btn-cftv {
+  --bs-btn-color: var(--cor-card);
+  --bs-btn-bg: var(--cor-destaque);
+  --bs-btn-border-color: var(--cor-destaque);
+  --bs-btn-hover-color: var(--cor-card);
+  --bs-btn-hover-bg: var(--cor-destaque-hover);
+  --bs-btn-hover-border-color: var(--cor-destaque-hover);
+  --bs-btn-active-color: var(--cor-card);
+  --bs-btn-active-bg: var(--cor-destaque-hover);
+  --bs-btn-active-border-color: var(--cor-destaque-hover);
+  font-weight: 500;
+}
+
+/* ---------- Painéis (listagens, formulários, cards) ---------- */
+.painel-cftv {
+  background-color: var(--cor-card);
+  border: 1px solid var(--cor-borda);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.painel-cftv .table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--cor-texto);
+  --bs-table-border-color: var(--cor-borda);
+  --bs-table-hover-bg: var(--cor-fundo);
+  margin-bottom: 0;
+}
+
+.painel-cftv .table thead th {
+  color: var(--cor-primaria);
+  border-bottom: 2px solid var(--cor-borda);
+  white-space: nowrap;
+}
+
+/* ---------- Formulários ---------- */
+.form-label {
+  font-weight: 500;
+}
+
+.form-control,
+.form-select {
+  border-color: var(--cor-borda);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--cor-destaque);
+  box-shadow: 0 0 0 0.15rem var(--cor-borda);
+}
+
+/* esconde o alerta vermelho quando não há erro geral no formulário */
+.validation-summary-valid {
+  display: none;
+}
+
+/* ---------- Destaques de estoque ---------- */
+/* Badges coloridos pelas variáveis do :root */
+.badge-sucesso {
+  background-color: var(--cor-sucesso);
+  color: var(--cor-card);
+}
+
+.badge-alerta {
+  background-color: var(--cor-alerta);
+  color: var(--cor-card);
+}
+
+.badge-destaque {
+  background-color: var(--cor-destaque);
+  color: var(--cor-card);
+}
+
+/* Linha do produto com estoque abaixo ou igual ao mínimo */
+.painel-cftv .table tr.estoque-baixo {
+  --bs-table-bg: color-mix(in srgb, var(--cor-alerta) 10%, var(--cor-card));
+}
+
+.painel-cftv .table tr.estoque-baixo > td:first-child {
+  border-left: 4px solid var(--cor-alerta);
+}
+
+/* Quantidade da movimentação: entrada em verde, saída na cor de destaque */
+.qtd-entrada {
+  color: var(--cor-sucesso);
+  font-weight: 600;
+}
+
+.qtd-saida {
+  color: var(--cor-destaque);
+  font-weight: 600;
+}
+
+/* ---------- Rodapé ---------- */
+footer {
+  background-color: var(--cor-card);
+  border-top: 1px solid var(--cor-borda);
+  padding: 1rem 0;
+  font-size: 0.875rem;
 }

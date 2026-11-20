@@ -1,5 +1,8 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+@{
+    var controllerAtual = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,41 +10,70 @@
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/EstoqueCFTV.styles.css" asp-append-version="true" />
 </head>
 <body>
+    @* ===== BARRA DE NAVEGAÇÃO: um link para cada Controller ===== *@
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-cftv">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EstoqueCFTV</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">EstoqueCFTV</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                        aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="menuPrincipal">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link @(controllerAtual == "Produto" ? "active" : "")" asp-controller="Produto" asp-action="Index">Produtos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link @(controllerAtual == "Categoria" ? "active" : "")" asp-controller="Categoria" asp-action="Index">Categorias</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(controllerAtual == "MovimentacaoEstoque" ? "active" : "")" asp-controller="MovimentacaoEstoque" asp-action="Index">Movimentações</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(controllerAtual == "Cliente" ? "active" : "")" asp-controller="Cliente" asp-action="Index">Clientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(controllerAtual == "OrdemDeServico" ? "active" : "")" asp-controller="OrdemDeServico" asp-action="Index">Ordens de Serviço</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(controllerAtual == "Servico" ? "active" : "")" asp-controller="Servico" asp-action="Index">Serviços</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(controllerAtual == "ItemServicoOS" ? "active" : "")" asp-controller="ItemServicoOS" asp-action="Index">Itens da OS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(controllerAtual == "Usuario" ? "active" : "")" asp-controller="Usuario" asp-action="Index">Usuários</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    @* ===== CONTEÚDO DA PÁGINA ===== *@
+    <main role="main" class="container py-4 flex-grow-1">
+        @* Mensagem de erro enviada pelas Controllers (ex.: exclusão não permitida) *@
+        @if (TempData["Erro"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["Erro"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+        }
+
+        @RenderBody()
+    </main>
+
+    @* ===== RODAPÉ ===== *@
+    <footer>
         <div class="container">
-            &copy; 2026 - EstoqueCFTV - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - EstoqueCFTV - Controle de estoque para segurança eletrônica
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

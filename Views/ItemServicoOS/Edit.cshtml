@@ -1,0 +1,53 @@
+@model ItemServicoOS
+@{
+    ViewData["Title"] = "Editar item da OS";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="painel-cftv">
+            <h1 class="h4 mb-4">Editar item da OS</h1>
+
+            <form asp-action="Edit" asp-route-ordemDeServicoId="@Model.OrdemDeServicoId" asp-route-servicoId="@Model.ServicoId" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" name="OrdemDeServicoId" value="@Model.OrdemDeServicoId" />
+                <input type="hidden" name="ServicoId" value="@Model.ServicoId" />
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="OrdemDeServicoId" class="form-label">Ordem de serviço (nº)</label>
+                        <select asp-for="OrdemDeServicoId" asp-items="ViewBag.OrdensDeServico" class="form-select" disabled>
+                            <option value="">Selecione...</option>
+                        </select>
+                        <span asp-validation-for="OrdemDeServicoId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ServicoId" class="form-label">Serviço</label>
+                        <select asp-for="ServicoId" asp-items="ViewBag.Servicos" class="form-select" disabled>
+                            <option value="">Selecione...</option>
+                        </select>
+                        <span asp-validation-for="ServicoId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Quantidade" class="form-label">Quantidade</label>
+                        <input asp-for="Quantidade" class="form-control" placeholder="1" />
+                        <span asp-validation-for="Quantidade" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ValorCobrado" class="form-label">Valor cobrado</label>
+                        <input asp-for="ValorCobrado" class="form-control" inputmode="decimal" />
+                        <span asp-validation-for="ValorCobrado" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-cftv">Salvar</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

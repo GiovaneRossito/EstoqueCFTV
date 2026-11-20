@@ -1,0 +1,45 @@
+@model IEnumerable<Servico>
+@{
+    ViewData["Title"] = "Serviços";
+}
+
+<div class="painel-cftv">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h4 mb-0">Serviços</h1>
+        <a asp-action="Create" class="btn btn-cftv">Novo serviço</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <p class="mb-0">Nenhum serviço cadastrado ainda. Use o botão acima para cadastrar o primeiro.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Mão de obra</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Nome</td>
+                            <td>@(item.Descricao ?? "—")</td>
+                            <td>@item.PrecoMaoDeObra.ToString("C")</td>
+                            <td class="text-end text-nowrap">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

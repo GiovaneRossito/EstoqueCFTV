@@ -1,0 +1,58 @@
+@model IEnumerable<OrdemDeServico>
+@{
+    ViewData["Title"] = "Ordens de serviço";
+}
+
+<div class="painel-cftv">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h4 mb-0">Ordens de serviço</h1>
+        <a asp-action="Create" class="btn btn-cftv">Nova ordem de serviço</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <p class="mb-0">Nenhuma ordem de serviço aberta ainda. Use o botão acima para abrir a primeira.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Cliente</th>
+                        <th>Usuário</th>
+                        <th>Abertura</th>
+                        <th>Conclusão</th>
+                        <th>Status</th>
+                        <th>Serviços</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        // Cor do badge conforme o status da OS
+                        var statusOs = item.Status ?? "";
+                        var classeStatus = statusOs.StartsWith("Conclu", StringComparison.OrdinalIgnoreCase) ? "badge-sucesso"
+                            : statusOs.Equals("Aberta", StringComparison.OrdinalIgnoreCase) ? "badge-destaque"
+                            : "text-bg-secondary";
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@(item.Cliente?.Nome ?? "—")</td>
+                            <td>@(item.Usuario?.Nome ?? "—")</td>
+                            <td>@item.DataAbertura.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@(item.DataConclusao?.ToString("dd/MM/yyyy HH:mm") ?? "—")</td>
+                            <td><span class="badge @classeStatus">@item.Status</span></td>
+                            <td>@item.ServicosRealizados.Sum(s => s.Quantidade * s.ValorCobrado).ToString("C")</td>
+                            <td class="text-end text-nowrap">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

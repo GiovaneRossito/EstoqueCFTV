@@ -1,8 +1,81 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Início";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="painel-cftv mb-4">
+    <h1 class="h2">Controle de estoque para segurança eletrônica</h1>
+    <p class="mb-4">
+        Gerencie produtos, entradas e saídas de estoque, clientes e ordens de serviço
+        das instalações de CFTV em um só lugar.
+    </p>
+    <a asp-controller="Produto" asp-action="Index" class="btn btn-cftv">Ver produtos</a>
+    <a asp-controller="MovimentacaoEstoque" asp-action="Create" class="btn btn-outline-secondary">Registrar movimentação</a>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6 col-lg-4">
+        <div class="painel-cftv h-100 d-flex flex-column">
+            <h2 class="h5">Produtos</h2>
+            <p>Cadastre equipamentos e acessórios e acompanhe o estoque mínimo.</p>
+            <div class="mt-auto">
+                <a asp-controller="Produto" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
+                <a asp-controller="Produto" asp-action="Create" class="btn btn-outline-secondary btn-sm">Novo produto</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="painel-cftv h-100 d-flex flex-column">
+            <h2 class="h5">Movimentações</h2>
+            <p>Registre as entradas e saídas de estoque e veja o histórico.</p>
+            <div class="mt-auto">
+                <a asp-controller="MovimentacaoEstoque" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
+                <a asp-controller="MovimentacaoEstoque" asp-action="Create" class="btn btn-outline-secondary btn-sm">Nova movimentação</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="painel-cftv h-100 d-flex flex-column">
+            <h2 class="h5">Ordens de serviço</h2>
+            <p>Abra e acompanhe os atendimentos feitos para os clientes.</p>
+            <div class="mt-auto">
+                <a asp-controller="OrdemDeServico" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
+                <a asp-controller="OrdemDeServico" asp-action="Create" class="btn btn-outline-secondary btn-sm">Nova ordem</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="painel-cftv h-100 d-flex flex-column">
+            <h2 class="h5">Clientes</h2>
+            <p>Mantenha os dados de contato e o endereço de cada cliente.</p>
+            <div class="mt-auto">
+                <a asp-controller="Cliente" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
+                <a asp-controller="Cliente" asp-action="Create" class="btn btn-outline-secondary btn-sm">Novo cliente</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="painel-cftv h-100 d-flex flex-column">
+            <h2 class="h5">Categorias</h2>
+            <p>Organize os produtos em grupos, como câmeras, DVRs e cabos.</p>
+            <div class="mt-auto">
+                <a asp-controller="Categoria" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
+                <a asp-controller="Categoria" asp-action="Create" class="btn btn-outline-secondary btn-sm">Nova categoria</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="painel-cftv h-100 d-flex flex-column">
+            <h2 class="h5">Serviços</h2>
+            <p>Defina os serviços oferecidos e o valor da mão de obra.</p>
+            <div class="mt-auto">
+                <a asp-controller="Servico" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
+                <a asp-controller="Servico" asp-action="Create" class="btn btn-outline-secondary btn-sm">Novo serviço</a>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,0 +1,25 @@
+@model Categoria
+@{
+    ViewData["Title"] = "Excluir categoria";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="painel-cftv">
+            <h1 class="h4 mb-3">Excluir categoria</h1>
+            <p>Confirma a exclusão do registro abaixo? Esta ação não pode ser desfeita.</p>
+
+            <dl class="row mb-4">
+            <dt class="col-sm-4 col-md-3">Nome</dt>
+            <dd class="col-sm-8 col-md-9">@Model.Nome</dd>
+            <dt class="col-sm-4 col-md-3">Descrição</dt>
+            <dd class="col-sm-8 col-md-9">@(Model.Descricao ?? "—")</dd>
+            </dl>
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">Excluir</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>

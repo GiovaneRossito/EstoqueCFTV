@@ -1,0 +1,49 @@
+@model IEnumerable<ItemServicoOS>
+@{
+    ViewData["Title"] = "Itens da OS";
+}
+
+<div class="painel-cftv">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h4 mb-0">Itens da OS</h1>
+        <a asp-action="Create" class="btn btn-cftv">Novo item</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <p class="mb-0">Nenhum serviço lançado em ordens de serviço ainda. Use o botão acima para lançar o primeiro.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>OS nº</th>
+                        <th>Serviço</th>
+                        <th>Quantidade</th>
+                        <th>Valor cobrado</th>
+                        <th>Subtotal</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.OrdemDeServicoId</td>
+                            <td>@(item.Servico?.Nome ?? "—")</td>
+                            <td>@item.Quantidade</td>
+                            <td>@item.ValorCobrado.ToString("C")</td>
+                            <td>@((item.Quantidade * item.ValorCobrado).ToString("C"))</td>
+                            <td class="text-end text-nowrap">
+                                <a asp-action="Edit" asp-route-ordemDeServicoId="@item.OrdemDeServicoId" asp-route-servicoId="@item.ServicoId" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <a asp-action="Delete" asp-route-ordemDeServicoId="@item.OrdemDeServicoId" asp-route-servicoId="@item.ServicoId" class="btn btn-sm btn-outline-danger">Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
