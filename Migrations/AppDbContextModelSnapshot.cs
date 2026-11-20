@@ -31,15 +31,69 @@ namespace EstoqueCFTV.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Categorias");
+                });
+
+            modelBuilder.Entity("EstoqueCFTV.Models.Cliente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Documento")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Endereco")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Telefone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("EstoqueCFTV.Models.ItemServicoOS", b =>
+                {
+                    b.Property<int>("OrdemDeServicoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServicoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ValorCobrado")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("OrdemDeServicoId", "ServicoId");
+
+                    b.HasIndex("ServicoId");
+
+                    b.ToTable("ItemServicos");
                 });
 
             modelBuilder.Entity("EstoqueCFTV.Models.MovimentacaoEstoque", b =>
@@ -50,11 +104,18 @@ namespace EstoqueCFTV.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ClienteId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DataMovimentacao")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Observacao")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("OrdemDeServicoId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProdutoId")
                         .HasColumnType("int");
@@ -62,18 +123,61 @@ namespace EstoqueCFTV.Migrations
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
 
-                    b.Property<string>("Responsavel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Tipo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("OrdemDeServicoId");
+
                     b.HasIndex("ProdutoId");
 
+                    b.HasIndex("UsuarioId");
+
                     b.ToTable("Movimentacoes");
+                });
+
+            modelBuilder.Entity("EstoqueCFTV.Models.OrdemDeServico", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DataAbertura")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DataConclusao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Observacoes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("OrdemDeServicos");
                 });
 
             modelBuilder.Entity("EstoqueCFTV.Models.Produto", b =>
@@ -88,11 +192,13 @@ namespace EstoqueCFTV.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("PrecoUnitario")
                         .HasColumnType("decimal(18,2)");
@@ -118,15 +224,127 @@ namespace EstoqueCFTV.Migrations
                     b.ToTable("Produtos");
                 });
 
+            modelBuilder.Entity("EstoqueCFTV.Models.Servico", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("PrecoMaoDeObra")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Servicos");
+                });
+
+            modelBuilder.Entity("EstoqueCFTV.Models.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Perfil")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenhaHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("EstoqueCFTV.Models.ItemServicoOS", b =>
+                {
+                    b.HasOne("EstoqueCFTV.Models.OrdemDeServico", "OrdemDeServico")
+                        .WithMany("ServicosRealizados")
+                        .HasForeignKey("OrdemDeServicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EstoqueCFTV.Models.Servico", "Servico")
+                        .WithMany("Ordens")
+                        .HasForeignKey("ServicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrdemDeServico");
+
+                    b.Navigation("Servico");
+                });
+
             modelBuilder.Entity("EstoqueCFTV.Models.MovimentacaoEstoque", b =>
                 {
+                    b.HasOne("EstoqueCFTV.Models.Cliente", "Cliente")
+                        .WithMany("Movimentacoes")
+                        .HasForeignKey("ClienteId");
+
+                    b.HasOne("EstoqueCFTV.Models.OrdemDeServico", null)
+                        .WithMany("MateriaisUtilizados")
+                        .HasForeignKey("OrdemDeServicoId");
+
                     b.HasOne("EstoqueCFTV.Models.Produto", "Produto")
                         .WithMany()
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EstoqueCFTV.Models.Usuario", "Usuario")
+                        .WithMany("Movimentacoes")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
                     b.Navigation("Produto");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("EstoqueCFTV.Models.OrdemDeServico", b =>
+                {
+                    b.HasOne("EstoqueCFTV.Models.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EstoqueCFTV.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("EstoqueCFTV.Models.Produto", b =>
@@ -143,6 +361,28 @@ namespace EstoqueCFTV.Migrations
             modelBuilder.Entity("EstoqueCFTV.Models.Categoria", b =>
                 {
                     b.Navigation("Produtos");
+                });
+
+            modelBuilder.Entity("EstoqueCFTV.Models.Cliente", b =>
+                {
+                    b.Navigation("Movimentacoes");
+                });
+
+            modelBuilder.Entity("EstoqueCFTV.Models.OrdemDeServico", b =>
+                {
+                    b.Navigation("MateriaisUtilizados");
+
+                    b.Navigation("ServicosRealizados");
+                });
+
+            modelBuilder.Entity("EstoqueCFTV.Models.Servico", b =>
+                {
+                    b.Navigation("Ordens");
+                });
+
+            modelBuilder.Entity("EstoqueCFTV.Models.Usuario", b =>
+                {
+                    b.Navigation("Movimentacoes");
                 });
 #pragma warning restore 612, 618
         }
