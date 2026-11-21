@@ -1,81 +1,153 @@
 @{
-    ViewData["Title"] = "Início";
+    ViewData["Title"] = "Painel de Controle";
+    var produtosCriticos = ViewBag.ProdutosCriticos as List<Produto> ?? new List<Produto>();
+    var ultimasMovimentacoes = ViewBag.UltimasMovimentacoes as List<MovimentacaoEstoque> ?? new List<MovimentacaoEstoque>();
 }
 
-<div class="painel-cftv mb-4">
-    <h1 class="h2">Controle de estoque para segurança eletrônica</h1>
-    <p class="mb-4">
-        Gerencie produtos, entradas e saídas de estoque, clientes e ordens de serviço
-        das instalações de CFTV em um só lugar.
-    </p>
-    <a asp-controller="Produto" asp-action="Index" class="btn btn-cftv">Ver produtos</a>
-    <a asp-controller="MovimentacaoEstoque" asp-action="Create" class="btn btn-outline-secondary">Registrar movimentação</a>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+        <h1 class="h4 mb-1">Painel de Controle</h1>
+        <p class="text-muted mb-0">Visão geral do estoque e ordens de serviço</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a asp-controller="MovimentacaoEstoque" asp-action="Create" class="btn btn-cftv">+ Movimentação</a>
+        <a asp-controller="OrdemDeServico" asp-action="Create" class="btn btn-outline-secondary">+ Nova OS</a>
+        <a asp-controller="Produto" asp-action="Create" class="btn btn-outline-secondary">+ Produto</a>
+    </div>
 </div>
 
-<div class="row g-3">
-    <div class="col-md-6 col-lg-4">
-        <div class="painel-cftv h-100 d-flex flex-column">
-            <h2 class="h5">Produtos</h2>
-            <p>Cadastre equipamentos e acessórios e acompanhe o estoque mínimo.</p>
-            <div class="mt-auto">
-                <a asp-controller="Produto" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
-                <a asp-controller="Produto" asp-action="Create" class="btn btn-outline-secondary btn-sm">Novo produto</a>
-            </div>
+@* ===== CARDS DE RESUMO ===== *@
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="painel-cftv h-100">
+            <div class="text-muted small mb-1">Produtos cadastrados</div>
+            <div class="h2 mb-2">@ViewBag.TotalProdutos</div>
+            <a asp-controller="Produto" asp-action="Index" class="small text-decoration-none">Ver catálogo &rarr;</a>
         </div>
     </div>
 
-    <div class="col-md-6 col-lg-4">
-        <div class="painel-cftv h-100 d-flex flex-column">
-            <h2 class="h5">Movimentações</h2>
-            <p>Registre as entradas e saídas de estoque e veja o histórico.</p>
-            <div class="mt-auto">
-                <a asp-controller="MovimentacaoEstoque" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
-                <a asp-controller="MovimentacaoEstoque" asp-action="Create" class="btn btn-outline-secondary btn-sm">Nova movimentação</a>
+    <div class="col-sm-6 col-lg-3">
+        <div class="painel-cftv h-100">
+            <div class="text-muted small mb-1">Estoque baixo / crítico</div>
+            <div class="h2 mb-2">
+                @ViewBag.QtdEstoqueBaixo
+                @if ((int)ViewBag.QtdEstoqueBaixo > 0)
+                {
+                    <span class="badge badge-alerta fs-6 align-middle">Atenção</span>
+                }
+                else
+                {
+                    <span class="badge badge-sucesso fs-6 align-middle">OK</span>
+                }
             </div>
+            <a asp-controller="Produto" asp-action="Index" class="small text-decoration-none">Conferir saldos &rarr;</a>
         </div>
     </div>
 
-    <div class="col-md-6 col-lg-4">
-        <div class="painel-cftv h-100 d-flex flex-column">
-            <h2 class="h5">Ordens de serviço</h2>
-            <p>Abra e acompanhe os atendimentos feitos para os clientes.</p>
-            <div class="mt-auto">
-                <a asp-controller="OrdemDeServico" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
-                <a asp-controller="OrdemDeServico" asp-action="Create" class="btn btn-outline-secondary btn-sm">Nova ordem</a>
-            </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="painel-cftv h-100">
+            <div class="text-muted small mb-1">OS abertas / em andamento</div>
+            <div class="h2 mb-2">@ViewBag.QtdOrdensAbertas</div>
+            <a asp-controller="OrdemDeServico" asp-action="Index" class="small text-decoration-none">Gerenciar OS &rarr;</a>
         </div>
     </div>
 
-    <div class="col-md-6 col-lg-4">
-        <div class="painel-cftv h-100 d-flex flex-column">
-            <h2 class="h5">Clientes</h2>
-            <p>Mantenha os dados de contato e o endereço de cada cliente.</p>
-            <div class="mt-auto">
-                <a asp-controller="Cliente" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
-                <a asp-controller="Cliente" asp-action="Create" class="btn btn-outline-secondary btn-sm">Novo cliente</a>
+    <div class="col-sm-6 col-lg-3">
+        <div class="painel-cftv h-100">
+            <div class="text-muted small mb-1">Clientes ativos</div>
+            <div class="h2 mb-2">@ViewBag.TotalClientes</div>
+            <a asp-controller="Cliente" asp-action="Index" class="small text-decoration-none">Ver clientes &rarr;</a>
+        </div>
+    </div>
+</div>
+
+@* ===== TABELAS OPERACIONAIS ===== *@
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="painel-cftv h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Produtos com estoque baixo</h2>
+                <a asp-controller="Produto" asp-action="Index" class="btn btn-sm btn-outline-secondary">Ver todos</a>
             </div>
+
+            @if (!produtosCriticos.Any())
+            {
+                <p class="text-muted mb-0">Todos os produtos estão acima do estoque mínimo.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>SKU</th>
+                                <th>Produto</th>
+                                <th>Atual</th>
+                                <th>Mínimo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in produtosCriticos)
+                            {
+                                <tr class="estoque-baixo">
+                                    <td>@item.SKU</td>
+                                    <td>@item.Nome</td>
+                                    <td><strong>@item.QuantidadeEstoque</strong> @item.UnidadeMedida</td>
+                                    <td>@item.QuantidadeMinima</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
         </div>
     </div>
 
-    <div class="col-md-6 col-lg-4">
-        <div class="painel-cftv h-100 d-flex flex-column">
-            <h2 class="h5">Categorias</h2>
-            <p>Organize os produtos em grupos, como câmeras, DVRs e cabos.</p>
-            <div class="mt-auto">
-                <a asp-controller="Categoria" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
-                <a asp-controller="Categoria" asp-action="Create" class="btn btn-outline-secondary btn-sm">Nova categoria</a>
+    <div class="col-lg-6">
+        <div class="painel-cftv h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Últimas movimentações</h2>
+                <a asp-controller="MovimentacaoEstoque" asp-action="Index" class="btn btn-sm btn-outline-secondary">Ver histórico</a>
             </div>
-        </div>
-    </div>
 
-    <div class="col-md-6 col-lg-4">
-        <div class="painel-cftv h-100 d-flex flex-column">
-            <h2 class="h5">Serviços</h2>
-            <p>Defina os serviços oferecidos e o valor da mão de obra.</p>
-            <div class="mt-auto">
-                <a asp-controller="Servico" asp-action="Index" class="btn btn-cftv btn-sm">Ver lista</a>
-                <a asp-controller="Servico" asp-action="Create" class="btn btn-outline-secondary btn-sm">Novo serviço</a>
-            </div>
+            @if (!ultimasMovimentacoes.Any())
+            {
+                <p class="text-muted mb-0">Nenhuma movimentação registrada ainda.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Produto</th>
+                                <th>Tipo</th>
+                                <th>Qtd</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var mov in ultimasMovimentacoes)
+                            {
+                                <tr>
+                                    <td>@mov.DataMovimentacao.ToString("dd/MM HH:mm")</td>
+                                    <td>@(mov.Produto?.Nome ?? "—")</td>
+                                    <td>
+                                        <span class="badge @(mov.Tipo == TipoMovimentacao.Entrada ? "badge-sucesso" : "badge-destaque")">
+                                            @(mov.Tipo == TipoMovimentacao.Entrada ? "Entrada" : "Saída")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="@(mov.Tipo == TipoMovimentacao.Entrada ? "qtd-entrada" : "qtd-saida")">
+                                            @(mov.Tipo == TipoMovimentacao.Entrada ? "+" : "−")@mov.Quantidade
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
         </div>
     </div>
 </div>
