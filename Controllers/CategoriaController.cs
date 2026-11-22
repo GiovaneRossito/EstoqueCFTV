@@ -1,9 +1,11 @@
 using EstoqueCFTV.Models;
 using EstoqueCFTV.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstoqueCFTV.Controllers;
 
+[Authorize]
 public class CategoriaController : Controller
 {
     private readonly CategoriaService _service;
@@ -13,18 +15,23 @@ public class CategoriaController : Controller
         _service = service;
     }
 
+    // Consulta permitida para usuários autenticados
     public IActionResult Index()
     {
         var categorias = _service.ListarTodos();
         return View(categorias);
     }
 
+    // Somente Administrador pode abrir o cadastro
+    [Authorize(Roles = "Administrador")]
     public IActionResult Create()
     {
         return View();
     }
 
+    // Somente Administrador pode cadastrar
     [HttpPost]
+    [Authorize(Roles = "Administrador")]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Categoria categoria)
     {
@@ -43,6 +50,8 @@ public class CategoriaController : Controller
         }
     }
 
+    // Somente Administrador pode abrir a edição
+    [Authorize(Roles = "Administrador")]
     public IActionResult Edit(int id)
     {
         var categoria = _service.ListarTodos().FirstOrDefault(c => c.Id == id);
@@ -52,7 +61,9 @@ public class CategoriaController : Controller
         return View(categoria);
     }
 
+    // Somente Administrador pode editar
     [HttpPost]
+    [Authorize(Roles = "Administrador")]
     [ValidateAntiForgeryToken]
     public IActionResult Edit(int id, Categoria categoria)
     {
@@ -71,6 +82,8 @@ public class CategoriaController : Controller
         }
     }
 
+    // Somente Administrador pode abrir a exclusão
+    [Authorize(Roles = "Administrador")]
     public IActionResult Delete(int id)
     {
         var categoria = _service.ListarTodos().FirstOrDefault(c => c.Id == id);
@@ -80,7 +93,9 @@ public class CategoriaController : Controller
         return View(categoria);
     }
 
+    // Somente Administrador pode excluir
     [HttpPost, ActionName("Delete")]
+    [Authorize(Roles = "Administrador")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int id)
     {

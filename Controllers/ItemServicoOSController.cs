@@ -2,9 +2,11 @@ using EstoqueCFTV.Models;
 using EstoqueCFTV.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstoqueCFTV.Controllers;
 
+[Authorize]
 public class ItemServicoOSController : Controller
 {
     private readonly ItemServicoOSService _service;

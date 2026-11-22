@@ -2,9 +2,11 @@ using EstoqueCFTV.Models;
 using EstoqueCFTV.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstoqueCFTV.Controllers;
 
+[Authorize]
 public class OrdemDeServicoController : Controller
 {
     private readonly OrdemDeServicoService _service;
@@ -89,6 +91,7 @@ public class OrdemDeServicoController : Controller
         }
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Delete(int id)
     {
         var ordem = _service.ListarTodos().FirstOrDefault(os => os.Id == id);
@@ -100,6 +103,7 @@ public class OrdemDeServicoController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Administrador")]
     public IActionResult DeleteConfirmed(int id)
     {
         try

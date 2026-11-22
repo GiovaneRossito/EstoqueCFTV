@@ -2,9 +2,11 @@ using EstoqueCFTV.Models;
 using EstoqueCFTV.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstoqueCFTV.Controllers;
 
+[Authorize]
 public class MovimentacaoEstoqueController : Controller
 {
     private readonly MovimentacaoEstoqueService _service;
@@ -59,6 +61,7 @@ public class MovimentacaoEstoqueController : Controller
         }
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Edit(int id)
     {
         var movimentacao = _service.ListarTodos().FirstOrDefault(m => m.Id == id);
@@ -71,6 +74,7 @@ public class MovimentacaoEstoqueController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Administrador")]
     public IActionResult Edit(int id, MovimentacaoEstoque movimentacao)
     {
         if (!ModelState.IsValid)
@@ -92,6 +96,7 @@ public class MovimentacaoEstoqueController : Controller
         }
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Delete(int id)
     {
         var movimentacao = _service.ListarTodos().FirstOrDefault(m => m.Id == id);
@@ -103,6 +108,7 @@ public class MovimentacaoEstoqueController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Administrador")]
     public IActionResult DeleteConfirmed(int id)
     {
         try

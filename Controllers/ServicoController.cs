@@ -1,9 +1,11 @@
 using EstoqueCFTV.Models;
 using EstoqueCFTV.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstoqueCFTV.Controllers;
 
+[Authorize]
 public class ServicoController : Controller
 {
     private readonly ServicoService _service;
@@ -19,6 +21,7 @@ public class ServicoController : Controller
         return View(servicos);
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Create()
     {
         return View();
@@ -26,6 +29,7 @@ public class ServicoController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Administrador")]
     public IActionResult Create(Servico servico)
     {
         if (!ModelState.IsValid)
@@ -43,6 +47,7 @@ public class ServicoController : Controller
         }
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Edit(int id)
     {
         var servico = _service.ListarTodos().FirstOrDefault(s => s.Id == id);
@@ -54,6 +59,7 @@ public class ServicoController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Administrador")]
     public IActionResult Edit(int id, Servico servico)
     {
         if (!ModelState.IsValid)
@@ -71,6 +77,7 @@ public class ServicoController : Controller
         }
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Delete(int id)
     {
         var servico = _service.ListarTodos().FirstOrDefault(s => s.Id == id);
@@ -82,6 +89,7 @@ public class ServicoController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Administrador")]
     public IActionResult DeleteConfirmed(int id)
     {
         try

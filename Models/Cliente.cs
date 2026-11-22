@@ -7,7 +7,7 @@ public class Cliente
     public  int Id { get; set; }
 
     [Required(ErrorMessage = "O nome do cliente é obrigatório.")]
-    [StringLength(150, ErrorMessage = "O nome deve ter no máximo 100 caracteres.")]
+    [StringLength(150, ErrorMessage = "O nome deve ter no máximo 150 caracteres.")]
     public string Nome { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "O documento do cliente é obrigatório.")]
@@ -20,7 +20,7 @@ public class Cliente
     [StringLength(20, ErrorMessage = "O telefone deve ter no máximo 20 caracteres.")]
     public string? Telefone { get; set; }
 
-    [StringLength(200, ErrorMessage = "O endereço deve ter no máximo 250 caracteres.")]
+    [StringLength(250, ErrorMessage = "O endereço deve ter no máximo 250 caracteres.")]
     public string? Endereco { get; set; }
     
     public ICollection<MovimentacaoEstoque> Movimentacoes  { get; set; } = new List<MovimentacaoEstoque>();

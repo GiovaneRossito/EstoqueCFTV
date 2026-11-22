@@ -1,9 +1,11 @@
 using EstoqueCFTV.Models;
 using EstoqueCFTV.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstoqueCFTV.Controllers;
 
+[Authorize(Roles = "Administrador")]
 public class UsuarioController : Controller
 {
     private readonly UsuarioService _service;

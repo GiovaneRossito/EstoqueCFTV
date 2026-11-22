@@ -2,9 +2,11 @@ using System.Diagnostics;
 using EstoqueCFTV.Models;
 using EstoqueCFTV.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstoqueCFTV.Controllers;
 
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ProdutoService _produtoService;

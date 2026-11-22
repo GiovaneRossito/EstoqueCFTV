@@ -2,9 +2,11 @@ using EstoqueCFTV.Models;
 using EstoqueCFTV.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstoqueCFTV.Controllers;
 
+[Authorize]
 public class ProdutoController : Controller
 {
     private readonly ProdutoService _service;
@@ -16,19 +18,24 @@ public class ProdutoController : Controller
         _categoriaService = categoriaService;
     }
 
+    // Consulta permitida para usuários autenticados
     public IActionResult Index()
     {
         var produtos = _service.ListarTodos();
         return View(produtos);
     }
 
+    // Somente Administrador pode abrir o cadastro
+    [Authorize(Roles = "Administrador")]
     public IActionResult Create()
     {
         CarregarCategorias();
         return View();
     }
 
+    // Somente Administrador pode cadastrar
     [HttpPost]
+    [Authorize(Roles = "Administrador")]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Produto produto)
     {
@@ -51,6 +58,8 @@ public class ProdutoController : Controller
         }
     }
 
+    // Somente Administrador pode abrir a edição
+    [Authorize(Roles = "Administrador")]
     public IActionResult Edit(int id)
     {
         var produto = _service.ListarTodos().FirstOrDefault(p => p.Id == id);
@@ -61,7 +70,9 @@ public class ProdutoController : Controller
         return View(produto);
     }
 
+    // Somente Administrador pode editar
     [HttpPost]
+    [Authorize(Roles = "Administrador")]
     [ValidateAntiForgeryToken]
     public IActionResult Edit(int id, Produto produto)
     {
@@ -84,6 +95,8 @@ public class ProdutoController : Controller
         }
     }
 
+    // Somente Administrador pode abrir a exclusão
+    [Authorize(Roles = "Administrador")]
     public IActionResult Delete(int id)
     {
         var produto = _service.ListarTodos().FirstOrDefault(p => p.Id == id);
@@ -93,7 +106,9 @@ public class ProdutoController : Controller
         return View(produto);
     }
 
+    // Somente Administrador pode excluir
     [HttpPost, ActionName("Delete")]
+    [Authorize(Roles = "Administrador")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int id)
     {
