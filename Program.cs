@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using EstoqueCFTV.Data;
 using EstoqueCFTV.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using EstoqueCFTV; // Necessário para encontrar a classe SeedData
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    var configuration = services.GetRequiredService<IConfiguration>();
+    
+    SeedData.Inicializar(context, configuration);
+}
+// ==========================================
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -50,6 +62,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();
