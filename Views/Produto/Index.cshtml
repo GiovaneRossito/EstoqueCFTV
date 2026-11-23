@@ -9,6 +9,37 @@
         <a asp-action="Create" class="btn btn-cftv">Novo produto</a>
     </div>
 
+    <form method="get" asp-action="Index" class="row g-2 align-items-end mb-4">
+        <div class="col-md-4">
+            <label for="busca" class="form-label mb-1">Buscar por Nome ou SKU</label>
+            <input type="text" id="busca" name="busca" value="@ViewBag.BuscaAtual" class="form-control" placeholder="Ex: Câmera, CAM-BUL..." />
+        </div>
+        <div class="col-md-3">
+            <label for="categoriaId" class="form-label mb-1">Categoria</label>
+            <select id="categoriaId" name="categoriaId" class="form-select">
+                <option value="">Todas as categorias</option>
+                @if (ViewBag.Categorias != null)
+                {
+                    foreach (SelectListItem cat in ViewBag.Categorias)
+                    {
+                        var selecionado = ViewBag.CategoriaAtual != null && ViewBag.CategoriaAtual.ToString() == cat.Value;
+                        <option value="@cat.Value" selected="@selecionado">@cat.Text</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="somenteEstoqueBaixo" name="somenteEstoqueBaixo" value="true" checked="@(ViewBag.SomenteEstoqueBaixo == true)" />
+                <label class="form-check-label" for="somenteEstoqueBaixo">Somente estoque baixo</label>
+            </div>
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+            <button type="submit" class="btn btn-cftv w-100">Filtrar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Limpar</a>
+        </div>
+    </form>
+
     @{
         var totalBaixo = Model.Count(p => p.QuantidadeEstoque <= p.QuantidadeMinima);
     }
@@ -19,7 +50,7 @@
 
     @if (!Model.Any())
     {
-        <p class="mb-0">Nenhum produto cadastrado ainda. Use o botão acima para cadastrar o primeiro.</p>
+        <p class="mb-0">Nenhum produto encontrado para o filtro informado.</p>
     }
     else
     {

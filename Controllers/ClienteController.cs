@@ -15,10 +15,21 @@ public class ClienteController : Controller
         _service = service;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? busca)
     {
-        var clientes = _service.ListarTodos();
-        return View(clientes);
+        var query = _service.ListarTodos().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(busca))
+        {
+            string termo = busca.Trim();
+            query = query.Where(c =>
+                c.Nome.Contains(termo, StringComparison.OrdinalIgnoreCase) ||
+                c.Documento.Contains(termo, StringComparison.OrdinalIgnoreCase) ||
+                (c.Endereco != null && c.Endereco.Contains(termo, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        ViewBag.BuscaAtual = busca;
+        return View(query.ToList());
     }
 
     [Authorize(Roles = "Administrador")]

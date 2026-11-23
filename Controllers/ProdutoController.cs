@@ -18,11 +18,35 @@ public class ProdutoController : Controller
         _categoriaService = categoriaService;
     }
 
-    // Consulta permitida para usuários autenticados
-    public IActionResult Index()
+    // Consulta permitida para usuários autenticados com filtros LINQ
+    public IActionResult Index(string? busca, int? categoriaId, bool somenteEstoqueBaixo = false)
     {
-        var produtos = _service.ListarTodos();
-        return View(produtos);
+        var query = _service.ListarTodos().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(busca))
+        {
+            string termo = busca.Trim();
+            query = query.Where(p =>
+                p.Nome.Contains(termo, StringComparison.OrdinalIgnoreCase) ||
+                p.SKU.Contains(termo, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (categoriaId.HasValue && categoriaId.Value > 0)
+        {
+            query = query.Where(p => p.CategoriaId == categoriaId.Value);
+        }
+
+        if (somenteEstoqueBaixo)
+        {
+            query = query.Where(p => p.QuantidadeEstoque <= p.QuantidadeMinima);
+        }
+
+        CarregarCategorias();
+        ViewBag.BuscaAtual = busca;
+        ViewBag.CategoriaAtual = categoriaId;
+        ViewBag.SomenteEstoqueBaixo = somenteEstoqueBaixo;
+
+        return View(query.ToList());
     }
 
     // Somente Administrador pode abrir o cadastro

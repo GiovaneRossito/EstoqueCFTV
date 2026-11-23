@@ -1,0 +1,102 @@
+@{
+    ViewData["Title"] = "Relatórios Gerenciais";
+}
+
+<div class="mb-4">
+    <h1 class="h4 mb-1">Relatórios Gerenciais</h1>
+    <p class="text-muted mb-0">Consultas consolidadas de múltiplas tabelas, agrupamento e pivot</p>
+</div>
+
+<div class="painel-cftv mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h5 mb-0">1. Faturamento Consolidado por Ordem de Serviço (Múltiplas Tabelas)</h2>
+        <span class="badge badge-destaque fs-6">Total Geral: @(((decimal)ViewBag.FaturamentoGeralOS).ToString("C"))</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>OS #</th>
+                    <th>Cliente</th>
+                    <th>Responsável</th>
+                    <th>Status</th>
+                    <th>Mão de Obra</th>
+                    <th>Materiais</th>
+                    <th>Total OS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.ResumoOS)
+                {
+                    <tr>
+                        <td>#@item.Id</td>
+                        <td>@item.Cliente</td>
+                        <td>@item.Responsavel</td>
+                        <td>@item.Status</td>
+                        <td>@item.TotalServicos.ToString("C")</td>
+                        <td>@item.TotalMateriais.ToString("C")</td>
+                        <td><strong>@item.TotalGeral.ToString("C")</strong></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="painel-cftv mb-4">
+    <h2 class="h5 mb-3">2. Estoque Agrupado por Categoria (GroupBy)</h2>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Categoria</th>
+                    <th>Produtos Cadastrados</th>
+                    <th>Unidades em Estoque</th>
+                    <th>Preço Médio</th>
+                    <th>Valor Total em Estoque</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cat in ViewBag.AgrupamentoCategorias)
+                {
+                    <tr>
+                        <td><strong>@cat.Categoria</strong></td>
+                        <td>@cat.QtdProdutos</td>
+                        <td>@cat.TotalItensEstoque</td>
+                        <td>@cat.PrecoMedio.ToString("C")</td>
+                        <td><strong>@cat.ValorTotalEstoque.ToString("C")</strong></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="painel-cftv">
+    <h2 class="h5 mb-3">3. Matriz Pivot de Movimentação por Produto</h2>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>SKU</th>
+                    <th>Produto</th>
+                    <th class="text-center">Total Entradas</th>
+                    <th class="text-center">Total Saídas</th>
+                    <th class="text-center">Saldo Atual</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in ViewBag.PivotProdutos)
+                {
+                    <tr>
+                        <td>@p.SKU</td>
+                        <td>@p.Nome</td>
+                        <td class="text-center qtd-entrada">+@p.Entradas</td>
+                        <td class="text-center qtd-saida">−@p.Saidas</td>
+                        <td class="text-center"><strong>@p.SaldoAtual</strong></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

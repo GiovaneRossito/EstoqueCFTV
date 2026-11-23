@@ -58,8 +58,8 @@ namespace EstoqueCFTV.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Endereco")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -233,8 +233,8 @@ namespace EstoqueCFTV.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descricao")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
