@@ -2,13 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using EstoqueCFTV.Data;
 using EstoqueCFTV.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using EstoqueCFTV; // Necessário para encontrar a classe SeedData
+using EstoqueCFTV; 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString(
-        // Windows: LocalDB (DefaultConnection). Linux: SQL Server em Docker (LinuxConnection).
         OperatingSystem.IsWindows() ? "DefaultConnection" : "LinuxConnection")));
 
 builder.Services.AddScoped<CategoriaService>();
@@ -20,7 +19,6 @@ builder.Services.AddScoped<ProdutoService>();
 builder.Services.AddScoped<ServicoService>();
 builder.Services.AddScoped<UsuarioService>();
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -40,18 +38,14 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<AppDbContext>();
     var configuration = services.GetRequiredService<IConfiguration>();
     
-    // Cria o banco e as tabelas caso ainda não existam (não há Migrations no projeto)
     context.Database.EnsureCreated();
 
     SeedData.Inicializar(context, configuration);
 }
-// ==========================================
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
