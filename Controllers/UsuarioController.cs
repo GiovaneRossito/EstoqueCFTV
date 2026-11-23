@@ -15,10 +15,24 @@ public class UsuarioController : Controller
         _service = service;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? busca, string? perfil)
     {
-        var usuarios = _service.ListarTodos();
-        return View(usuarios);
+        var usuarios = _service.ListarTodos().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(busca))
+        {
+            string termo = busca.Trim();
+            usuarios = usuarios.Where(u =>
+                u.Nome.Contains(termo, StringComparison.OrdinalIgnoreCase) ||
+                u.Email.Contains(termo, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(perfil))
+            usuarios = usuarios.Where(u => u.Perfil == perfil);
+
+        ViewBag.BuscaAtual = busca;
+        ViewBag.PerfilAtual = perfil;
+        return View(usuarios.ToList());
     }
 
     public IActionResult Create()

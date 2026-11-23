@@ -9,6 +9,43 @@
         <a asp-action="Create" class="btn btn-cftv">Nova movimentação</a>
     </div>
 
+    <form method="get" asp-action="Index" class="row g-2 align-items-end mb-4">
+        <div class="col-md-3">
+            <label for="busca" class="form-label mb-1">Observação, Cliente ou Usuário</label>
+            <input type="text" id="busca" name="busca" value="@ViewBag.BuscaAtual" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label for="produtoId" class="form-label mb-1">Produto</label>
+            <select id="produtoId" name="produtoId" class="form-select">
+                <option value="">Todos</option>
+                @foreach (SelectListItem p in ViewBag.Produtos)
+                {
+                    <option value="@p.Value" selected="@(ViewBag.ProdutoAtual != null && ViewBag.ProdutoAtual.ToString() == p.Value)">@p.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label for="tipo" class="form-label mb-1">Tipo</label>
+            <select id="tipo" name="tipo" class="form-select">
+                <option value="">Todos</option>
+                <option value="Entrada" selected="@(ViewBag.TipoAtual == TipoMovimentacao.Entrada)">Entrada</option>
+                <option value="Saida" selected="@(ViewBag.TipoAtual == TipoMovimentacao.Saida)">Saída</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="dataInicial" class="form-label mb-1">De</label>
+            <input type="date" id="dataInicial" name="dataInicial" value="@ViewBag.DataInicial" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label for="dataFinal" class="form-label mb-1">Até</label>
+            <input type="date" id="dataFinal" name="dataFinal" value="@ViewBag.DataFinal" class="form-control" />
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+            <button type="submit" class="btn btn-cftv w-100">Filtrar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Limpar</a>
+        </div>
+    </form>
+
     @if (!Model.Any())
     {
         <p class="mb-0">Nenhuma movimentação registrada ainda. Use o botão acima para registrar a primeira.</p>

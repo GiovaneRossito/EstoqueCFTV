@@ -7,7 +7,9 @@ using EstoqueCFTV; // Necessário para encontrar a classe SeedData
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString(
+        // Windows: LocalDB (DefaultConnection). Linux: SQL Server em Docker (LinuxConnection).
+        OperatingSystem.IsWindows() ? "DefaultConnection" : "LinuxConnection")));
 
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<ClienteService>();
@@ -38,6 +40,9 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<AppDbContext>();
     var configuration = services.GetRequiredService<IConfiguration>();
     
+    // Cria o banco e as tabelas caso ainda não existam (não há Migrations no projeto)
+    context.Database.EnsureCreated();
+
     SeedData.Inicializar(context, configuration);
 }
 // ==========================================

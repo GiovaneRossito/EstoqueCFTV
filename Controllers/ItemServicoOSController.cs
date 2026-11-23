@@ -23,10 +23,23 @@ public class ItemServicoOSController : Controller
         _servicoService = servicoService;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? busca, int? ordemId)
     {
-        var itens = _service.ListarTodos();
-        return View(itens);
+        var itens = _service.ListarTodos().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(busca))
+        {
+            string termo = busca.Trim();
+            itens = itens.Where(i =>
+                i.Servico != null && i.Servico.Nome.Contains(termo, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (ordemId.HasValue && ordemId.Value > 0)
+            itens = itens.Where(i => i.OrdemDeServicoId == ordemId.Value);
+
+        ViewBag.BuscaAtual = busca;
+        ViewBag.OrdemAtual = ordemId;
+        return View(itens.ToList());
     }
 
     public IActionResult Create()

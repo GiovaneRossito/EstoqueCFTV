@@ -9,6 +9,35 @@
         <a asp-action="Create" class="btn btn-cftv">Nova ordem de serviço</a>
     </div>
 
+    <form method="get" asp-action="Index" class="row g-2 align-items-end mb-4">
+        <div class="col-md-3">
+            <label for="busca" class="form-label mb-1">Cliente, Responsável ou Observação</label>
+            <input type="text" id="busca" name="busca" value="@ViewBag.BuscaAtual" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label for="status" class="form-label mb-1">Status</label>
+            <select id="status" name="status" class="form-select">
+                <option value="">Todos</option>
+                @foreach (var st in (List<string>)ViewBag.StatusLista)
+                {
+                    <option value="@st" selected="@(ViewBag.StatusAtual == st)">@st</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="dataInicial" class="form-label mb-1">Abertura de</label>
+            <input type="date" id="dataInicial" name="dataInicial" value="@ViewBag.DataInicial" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label for="dataFinal" class="form-label mb-1">até</label>
+            <input type="date" id="dataFinal" name="dataFinal" value="@ViewBag.DataFinal" class="form-control" />
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-cftv w-100">Filtrar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Limpar</a>
+        </div>
+    </form>
+
     @if (!Model.Any())
     {
         <p class="mb-0">Nenhuma ordem de serviço aberta ainda. Use o botão acima para abrir a primeira.</p>

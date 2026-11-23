@@ -15,10 +15,20 @@ public class ServicoController : Controller
         _service = service;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? busca)
     {
-        var servicos = _service.ListarTodos();
-        return View(servicos);
+        var servicos = _service.ListarTodos().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(busca))
+        {
+            string termo = busca.Trim();
+            servicos = servicos.Where(s =>
+                s.Nome.Contains(termo, StringComparison.OrdinalIgnoreCase) ||
+                (s.Descricao != null && s.Descricao.Contains(termo, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        ViewBag.BuscaAtual = busca;
+        return View(servicos.ToList());
     }
 
     [Authorize(Roles = "Administrador")]

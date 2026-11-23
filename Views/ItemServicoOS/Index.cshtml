@@ -9,6 +9,21 @@
         <a asp-action="Create" class="btn btn-cftv">Novo item</a>
     </div>
 
+    <form method="get" asp-action="Index" class="row g-2 align-items-end mb-4">
+        <div class="col-md-5">
+            <label for="busca" class="form-label mb-1">Buscar por Serviço</label>
+            <input type="text" id="busca" name="busca" value="@ViewBag.BuscaAtual" class="form-control" placeholder="Ex: Instalação..." />
+        </div>
+        <div class="col-md-3">
+            <label for="ordemId" class="form-label mb-1">Nº da OS</label>
+            <input type="number" min="1" id="ordemId" name="ordemId" value="@ViewBag.OrdemAtual" class="form-control" />
+        </div>
+        <div class="col-md-4 d-flex gap-2">
+            <button type="submit" class="btn btn-cftv w-100">Filtrar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Limpar</a>
+        </div>
+    </form>
+
     @if (!Model.Any())
     {
         <p class="mb-0">Nenhum serviço lançado em ordens de serviço ainda. Use o botão acima para lançar o primeiro.</p>

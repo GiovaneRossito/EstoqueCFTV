@@ -26,10 +26,39 @@ public class MovimentacaoEstoqueController : Controller
         _clienteService = clienteService;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? busca, int? produtoId, TipoMovimentacao? tipo, DateTime? dataInicial, DateTime? dataFinal)
     {
-        var movimentacoes = _service.ListarTodos();
-        return View(movimentacoes);
+        var movimentacoes = _service.ListarTodos().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(busca))
+        {
+            string termo = busca.Trim();
+            movimentacoes = movimentacoes.Where(m =>
+                (m.Observacao != null && m.Observacao.Contains(termo, StringComparison.OrdinalIgnoreCase)) ||
+                (m.Cliente != null && m.Cliente.Nome.Contains(termo, StringComparison.OrdinalIgnoreCase)) ||
+                (m.Usuario != null && m.Usuario.Nome.Contains(termo, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        if (produtoId.HasValue && produtoId.Value > 0)
+            movimentacoes = movimentacoes.Where(m => m.ProdutoId == produtoId.Value);
+
+        if (tipo.HasValue)
+            movimentacoes = movimentacoes.Where(m => m.Tipo == tipo.Value);
+
+        if (dataInicial.HasValue)
+            movimentacoes = movimentacoes.Where(m => m.DataMovimentacao.Date >= dataInicial.Value.Date);
+
+        if (dataFinal.HasValue)
+            movimentacoes = movimentacoes.Where(m => m.DataMovimentacao.Date <= dataFinal.Value.Date);
+
+        ViewBag.Produtos = new SelectList(_produtoService.ListarTodos(), "Id", "Nome");
+        ViewBag.BuscaAtual = busca;
+        ViewBag.ProdutoAtual = produtoId;
+        ViewBag.TipoAtual = tipo;
+        ViewBag.DataInicial = dataInicial?.ToString("yyyy-MM-dd");
+        ViewBag.DataFinal = dataFinal?.ToString("yyyy-MM-dd");
+
+        return View(movimentacoes.OrderByDescending(m => m.DataMovimentacao).ToList());
     }
 
     public IActionResult Create()

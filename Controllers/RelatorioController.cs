@@ -83,6 +83,28 @@ public class RelatorioController : Controller
             };
         }).ToList();
 
+        // Pivot: linhas = produtos, colunas = meses (gerados a partir das movimentações),
+        // células = saldo líquido do mês (entradas − saídas)
+        var meses = movimentacoes
+            .Select(m => new DateTime(m.DataMovimentacao.Year, m.DataMovimentacao.Month, 1))
+            .Distinct()
+            .OrderBy(d => d)
+            .ToList();
+
+        var pivotMensal = produtos.Select(p => new
+        {
+            p.SKU,
+            p.Nome,
+            PorMes = meses.Select(mes => movimentacoes
+                .Where(m => m.ProdutoId == p.Id &&
+                            m.DataMovimentacao.Year == mes.Year &&
+                            m.DataMovimentacao.Month == mes.Month)
+                .Sum(m => m.Tipo == TipoMovimentacao.Entrada ? m.Quantidade : -m.Quantidade))
+                .ToList()
+        }).ToList();
+
+        ViewBag.MesesPivot = meses.Select(m => m.ToString("MM/yyyy")).ToList();
+        ViewBag.PivotMensal = pivotMensal;
         ViewBag.ResumoOS = resumoOS;
         ViewBag.FaturamentoGeralOS = resumoOS.Sum(x => x.TotalGeral);
         ViewBag.AgrupamentoCategorias = agrupamentoCategorias;

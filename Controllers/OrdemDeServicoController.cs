@@ -23,10 +23,34 @@ public class OrdemDeServicoController : Controller
         _usuarioService = usuarioService;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? busca, string? status, DateTime? dataInicial, DateTime? dataFinal)
     {
-        var ordens = _service.ListarTodos();
-        return View(ordens);
+        var ordens = _service.ListarTodos().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(busca))
+        {
+            string termo = busca.Trim();
+            ordens = ordens.Where(os =>
+                (os.Cliente != null && os.Cliente.Nome.Contains(termo, StringComparison.OrdinalIgnoreCase)) ||
+                (os.Usuario != null && os.Usuario.Nome.Contains(termo, StringComparison.OrdinalIgnoreCase)) ||
+                (os.Observacoes != null && os.Observacoes.Contains(termo, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        if (!string.IsNullOrWhiteSpace(status))
+            ordens = ordens.Where(os => os.Status.Equals(status, StringComparison.OrdinalIgnoreCase));
+
+        if (dataInicial.HasValue)
+            ordens = ordens.Where(os => os.DataAbertura.Date >= dataInicial.Value.Date);
+
+        if (dataFinal.HasValue)
+            ordens = ordens.Where(os => os.DataAbertura.Date <= dataFinal.Value.Date);
+
+        ViewBag.BuscaAtual = busca;
+        ViewBag.StatusAtual = status;
+        ViewBag.DataInicial = dataInicial?.ToString("yyyy-MM-dd");
+        ViewBag.DataFinal = dataFinal?.ToString("yyyy-MM-dd");
+        ViewBag.StatusLista = _service.ListarTodos().Select(os => os.Status).Distinct().OrderBy(s => s).ToList();
+        return View(ordens.ToList());
     }
 
     public IActionResult Create()

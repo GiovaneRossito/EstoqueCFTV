@@ -1,4 +1,4 @@
-﻿﻿using System.Collections.Generic;
+﻿using System.Collections.Generic;
  using EstoqueCFTV.Models;
  using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +21,10 @@ namespace EstoqueCFTV.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Produto>().Property(p => p.PrecoUnitario).HasPrecision(18, 2);
+            modelBuilder.Entity<Servico>().Property(s => s.PrecoMaoDeObra).HasPrecision(18, 2);
+            modelBuilder.Entity<ItemServicoOS>().Property(i => i.ValorCobrado).HasPrecision(18, 2);
             
             modelBuilder.Entity<ItemServicoOS>().HasKey(iso => new { iso.OrdemDeServicoId, iso.ServicoId });
 

@@ -9,6 +9,17 @@
         <a asp-action="Create" class="btn btn-cftv">Novo serviço</a>
     </div>
 
+    <form method="get" asp-action="Index" class="row g-2 align-items-end mb-4">
+        <div class="col-md-8">
+            <label for="busca" class="form-label mb-1">Buscar por Nome ou Descrição</label>
+            <input type="text" id="busca" name="busca" value="@ViewBag.BuscaAtual" class="form-control" placeholder="Ex: Instalação, Manutenção..." />
+        </div>
+        <div class="col-md-4 d-flex gap-2">
+            <button type="submit" class="btn btn-cftv w-100">Filtrar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Limpar</a>
+        </div>
+    </form>
+
     @if (!Model.Any())
     {
         <p class="mb-0">Nenhum serviço cadastrado ainda. Use o botão acima para cadastrar o primeiro.</p>

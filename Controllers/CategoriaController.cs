@@ -16,10 +16,20 @@ public class CategoriaController : Controller
     }
 
     // Consulta permitida para usuários autenticados
-    public IActionResult Index()
+    public IActionResult Index(string? busca)
     {
-        var categorias = _service.ListarTodos();
-        return View(categorias);
+        var categorias = _service.ListarTodos().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(busca))
+        {
+            string termo = busca.Trim();
+            categorias = categorias.Where(c =>
+                c.Nome.Contains(termo, StringComparison.OrdinalIgnoreCase) ||
+                (c.Descricao != null && c.Descricao.Contains(termo, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        ViewBag.BuscaAtual = busca;
+        return View(categorias.ToList());
     }
 
     // Somente Administrador pode abrir o cadastro
